@@ -26,6 +26,10 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.rmtheis:tess-two:9.0.0'
+//    implementation 'com.rmtheis:tess-two:9.0.0'
+    implementation ('com.zsmarter:Tess4Android:1.0.1'){
+       exclude group: 'com.android.support'
+    }
+    implementation 'com.googlecode:tess-two-api:1.0.1'
     implementation project(path: ':zxing')
 }

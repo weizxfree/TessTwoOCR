@@ -27,8 +27,8 @@ public class TessEngine {
         TessBaseAPI tessBaseAPI = new TessBaseAPI();
         String path = TessDataManager.getTesseractFolder();
         Log.d(TAG, "Tess folder: " + path);
-        tessBaseAPI.setDebug(true);
-        tessBaseAPI.init(path, "eng");
+        tessBaseAPI.setDebug(false);
+        tessBaseAPI.init(path, "num");
         // 白名单
         tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
         // 黑名单
