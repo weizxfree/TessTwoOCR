@@ -28,7 +28,7 @@ public class TessEngine {
         String path = TessDataManager.getTesseractFolder();
         Log.d(TAG, "Tess folder: " + path);
         tessBaseAPI.setDebug(false);
-        tessBaseAPI.init(path, "num");
+        tessBaseAPI.init(path, "digits_comma");
         // 白名单
         tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
         // 黑名单

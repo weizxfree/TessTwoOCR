@@ -22,7 +22,7 @@ public class TessDataManager {
 
     private static final String tessdir = "tesseract";
     private static final String subdir = "tessdata";
-    private static final String filename = "num.traineddata";
+    private static final String filename = "digits_comma.traineddata";
 
     private static String trainedDataPath;
 
@@ -88,9 +88,10 @@ public class TessDataManager {
 
     private static byte[] readRawTrainingData(Context context){
 
+
         try {
-            InputStream fileInputStream = context.getResources()
-                    .openRawResource(R.raw.num);
+            InputStream fileInputStream = context.getResources().openRawResource(
+                    (R.raw.digits_comma));
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
