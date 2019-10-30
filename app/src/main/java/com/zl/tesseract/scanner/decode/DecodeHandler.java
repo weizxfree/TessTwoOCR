@@ -37,6 +37,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 final class DecodeHandler extends Handler {
 
@@ -110,25 +112,23 @@ final class DecodeHandler extends Handler {
             }
 
             PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(mRotatedData, width, height, rect.left, rect.top, rect.width(), rect.height(), false);
-
-            if (mActivity.isQRCode()){
-                /*
-                 HybridBinarizer算法使用了更高级的算法，针对渐变图像更优，也就是准确率高。
-                 但使用GlobalHistogramBinarizer识别效率确实比HybridBinarizer要高一些。
-                 */
-                rawResult = mMultiFormatReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)), mHints);
-                if (rawResult == null) {
-                    rawResult = mMultiFormatReader.decode(new BinaryBitmap(new HybridBinarizer(source)), mHints);
-                }
+            TessEngine tessEngine = TessEngine.Generate();
+            Bitmap bitmap = source.renderCroppedGreyscaleBitmap();
+            String result = tessEngine.detectText(bitmap);
+            String telePhoneNum = getTelnum(result);
+            if(!TextUtils.isEmpty(result) && !TextUtils.isEmpty(telePhoneNum)){
+                rawResult = new Result(telePhoneNum, null, null, null);
+                rawResult.setBitmap(bitmap);
+                rawResult.setType(1);
             }else{
-                TessEngine tessEngine = TessEngine.Generate();
-                Bitmap bitmap = source.renderCroppedGreyscaleBitmap();
-                String result = tessEngine.detectText(bitmap);
-                if(!TextUtils.isEmpty(result)){
-                    rawResult = new Result(result, null, null, null);
-                    rawResult.setBitmap(bitmap);
+                rawResult = mMultiFormatReader.decodeWithState(new BinaryBitmap(new HybridBinarizer(source)));
+                if (rawResult == null) {
+                    rawResult = mMultiFormatReader.decodeWithState(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
                 }
+
+                rawResult.setType(2);
             }
+
 
         } catch (Exception ignored) {
         } finally {
@@ -143,4 +143,25 @@ final class DecodeHandler extends Handler {
             message.sendToTarget();
         }
     }
+
+
+    /**
+     * 获取字符串中的手机号
+     */
+    public String getTelnum(String sParam) {
+        if (sParam.length() <= 0)
+            return "";
+        Pattern pattern = Pattern.compile("(1|861)(3|5|8)\\d{9}$*");
+        Matcher matcher = pattern.matcher(sParam);
+        StringBuffer bf = new StringBuffer();
+        while (matcher.find()) {
+            bf.append(matcher.group()).append(",");
+        }
+        int len = bf.length();
+        if (len > 0) {
+            bf.deleteCharAt(len - 1);
+        }
+        return bf.toString();
+    }
+
 }

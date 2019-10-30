@@ -36,6 +36,7 @@ public final class Result {
   private Map<ResultMetadataType,Object> resultMetadata;
   private final long timestamp;
   private Bitmap bitmap;
+  private int type;
 
   public Result(String text,
                 byte[] rawBytes,
@@ -159,5 +160,13 @@ public final class Result {
 
   public void setBitmap(Bitmap bitmap) {
     this.bitmap = bitmap;
+  }
+
+  public int getType() {
+    return type;
+  }
+
+  public void setType(int type) {
+    this.type = type;
   }
 }

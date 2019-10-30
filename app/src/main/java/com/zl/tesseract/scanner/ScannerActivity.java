@@ -266,9 +266,9 @@ public class ScannerActivity extends AppCompatActivity implements Callback, Came
         } else {
             Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(200L);
-            if (switch1.isChecked()) {
+            if (result.getType() == 2) {
                 qrSucceed(result.getText());
-            } else {
+            } else if(result.getType() == 1) {
                 phoneSucceed(result.getText(), result.getBitmap());
             }
         }
